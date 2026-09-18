@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>合同会社匠工業</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="合同会社匠工業 — 溶接・雑鍛冶・機械据え付けの現場を、経営者自らAIエージェントで支える建設業。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #050b14;
+    --panel-line: rgba(120,205,255,0.16);
+    --grid: rgba(110,190,255,0.055);
+    --cyan: #5be3f0;
+    --cyan-dim: #2d7a8a;
+    --amber: #ffb454;
+    --green: #5fe3a8;
+    --text: #eaf6fb;
+    --text-dim: #7fa3b8;
+    --text-faint: #4d6b7d;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0; background:var(--bg); color:var(--text);}
+  body{
+    font-family:'IBM Plex Sans JP','IBM Plex Sans',sans-serif;
+    padding-block:0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:32px 32px;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 20px;}
+  a{color:var(--cyan);}
+
+  nav{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 0; border-bottom:1px solid var(--panel-line);
+  }
+  .logo{font-family:'Rajdhani',sans-serif; font-weight:700; font-size:20px; letter-spacing:0.06em;}
+  .logo span{color:var(--cyan);}
+  nav .links{display:flex; gap:22px; font-size:13px; color:var(--text-dim);}
+  nav .links a{text-decoration:none; color:var(--text-dim);}
+  nav .links a:hover{color:var(--cyan);}
+
+  header.hero{
+    padding:64px 0 48px;
+    border-bottom:1px solid var(--panel-line);
+    position:relative;
+  }
+  .corner{position:absolute; width:22px; height:22px; border-color:var(--cyan);}
+  .corner.tl{top:0; left:20px; border-top:2px solid; border-left:2px solid;}
+  .corner.tr{top:0; right:20px; border-top:2px solid; border-right:2px solid;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.2em; color:var(--cyan);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Rajdhani',sans-serif; font-weight:700;
+    font-size:clamp(30px,5vw,52px); line-height:1.15; margin:0 0 18px;
+    text-wrap:balance;
+  }
+  h1 span{color:var(--cyan);}
+  .lead{font-size:16px; color:var(--text-dim); max-width:52ch; line-height:1.8; margin:0 0 28px;}
+  .cta-row{display:flex; gap:12px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Rajdhani',sans-serif; font-weight:600; letter-spacing:0.04em;
+    padding:12px 22px; border-radius:2px; text-decoration:none; font-size:15px;
+    display:inline-block;
+  }
+  .btn.primary{background:var(--cyan); color:#031018;}
+  .btn.ghost{border:1px solid var(--panel-line); color:var(--text);}
+
+  section{padding:56px 0; border-bottom:1px solid var(--panel-line);}
+  .section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:28px;}
+  .section-head .idx{font-family:'IBM Plex Mono',monospace; color:var(--text-faint); font-size:13px;}
+  .section-head h2{font-family:'Rajdhani',sans-serif; font-weight:700; font-size:26px; margin:0; letter-spacing:0.02em;}
+
+  .services{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:18px;}
+  .service{border:1px solid var(--panel-line); background:linear-gradient(180deg, rgba(91,227,240,0.035), transparent 45%); padding:22px;}
+  .service .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--cyan); letter-spacing:0.1em; margin-bottom:10px; display:block;}
+  .service h3{font-family:'Rajdhani',sans-serif; font-size:19px; margin:0 0 8px;}
+  .service p{font-size:13.5px; color:var(--text-dim); line-height:1.7; margin:0;}
+
+  .note-card{
+    border:1px solid var(--panel-line); padding:28px; display:flex; gap:24px; flex-wrap:wrap; align-items:center;
+    justify-content:space-between; background:rgba(91,227,240,0.03);
+  }
+  .note-card .txt{max-width:46ch;}
+  .note-card h3{font-family:'Rajdhani',sans-serif; font-size:20px; margin:0 0 8px;}
+  .note-card p{font-size:13.5px; color:var(--text-dim); line-height:1.7; margin:0;}
+
+  .recruit{
+    border:1px solid var(--panel-line); padding:32px;
+    background:linear-gradient(135deg, rgba(255,180,84,0.06), transparent 60%);
+  }
+  .recruit .chip{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    color:var(--amber); border:1px solid var(--amber); padding:3px 10px; margin-bottom:14px;
+  }
+  .recruit h2{font-family:'Rajdhani',sans-serif; font-size:26px; margin:0 0 12px;}
+  .recruit p{color:var(--text-dim); font-size:14px; line-height:1.8; max-width:60ch; margin:0 0 20px;}
+  .recruit-points{display:flex; gap:24px; flex-wrap:wrap; margin-bottom:24px;}
+  .recruit-points div{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--text-dim);}
+  .recruit-points strong{color:var(--text); display:block; font-family:'Rajdhani',sans-serif; font-size:20px;}
+
+  footer{padding:32px 0; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-faint);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo">匠<span>工業</span></div>
+    <div class="links">
+      <a href="#services">事業内容</a>
+      <a href="#note">note</a>
+      <a href="#recruit">採用情報</a>
+    </div>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="wrap">
+    <div class="eyebrow">GODO KAISHA TAKUMI KOGYO</div>
+    <h1>溶接・雑鍛冶・機械据え付け。<br>現場を支える<span>匠</span>の手仕事。</h1>
+    <p class="lead">合同会社匠工業は、溶接工事・雑鍛冶・機械据え付けを主軸とする建設業です。経営者自らが現場に立ちながら、日々の判断や記録にAIエージェントを取り入れ、より丁寧な仕事につなげる取り組みを続けています。</p>
+    <div class="cta-row">
+      <a class="btn primary" href="#recruit">採用情報を見る</a>
+      <a class="btn ghost" href="#note">noteでの発信を見る</a>
+    </div>
+  </div>
+</header>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head"><span class="idx">01</span><h2>事業内容</h2></div>
+    <div class="services">
+      <div class="service">
+        <span class="tag">WELDING</span>
+        <h3>溶接工事</h3>
+        <p>現場・工場問わず、鉄骨・配管などの溶接工事に対応。仕上がりと安全管理の両立を大切にしています。</p>
+      </div>
+      <div class="service">
+        <span class="tag">METALWORK</span>
+        <h3>雑鍛冶</h3>
+        <p>規格品では対応しきれない、現場ごとの要望に合わせた鍛冶加工。細かな寸法調整や一点物の製作も承ります。</p>
+      </div>
+      <div class="service">
+        <span class="tag">INSTALLATION</span>
+        <h3>機械据え付け</h3>
+        <p>工場設備・機械の搬入から据え付け・調整まで。精度が求められる据え付け作業を丁寧に進めます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="note">
+  <div class="wrap">
+    <div class="section-head"><span class="idx">02</span><h2>note で発信中</h2></div>
+    <div class="note-card">
+      <div class="txt">
+        <h3>建設業経営 × AIエージェント構築のリアル</h3>
+        <p>現場の手戻り、経営判断、AIエージェントを実装していく過程を、数字と実体験ベースで発信しています。同業の方にも、AI活用に興味がある方にも。</p>
+      </div>
+      <a class="btn primary" href="https://note.com/" target="_blank" rel="noopener">note を見る(準備中)</a>
+    </div>
+  </div>
+</section>
+
+<section id="recruit" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="recruit">
+      <span class="chip">RECRUITING</span>
+      <h2>一緒に現場を支える仲間を探しています</h2>
+      <p>溶接・雑鍛冶・機械据え付けの経験者はもちろん、未経験からでも現場で技術を身につけたい方を歓迎します。まずは話を聞いてみたいという方もお気軽にどうぞ。</p>
+      <div class="recruit-points">
+        <div><strong>未経験</strong>応相談</div>
+        <div><strong>雇用形態</strong>応相談</div>
+        <div><strong>勤務地</strong>現場による</div>
+      </div>
+      <a class="btn primary" href="#contact">お問い合わせはこちら</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer id="contact">
+    <div>合同会社匠工業</div>
+    <div>お問い合わせ: [連絡先を追記予定]</div>
+  </footer>
+</div>
+</body>
+</html>
