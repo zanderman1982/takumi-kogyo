@@ -122,6 +122,11 @@
   .recruit-points{display:flex; gap:24px; flex-wrap:wrap; margin-bottom:24px;}
   .recruit-points div{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--text-dim);}
   .recruit-points strong{color:var(--text); display:block; font-family:'Rajdhani',sans-serif; font-size:20px;}
+  .recruit-terms{display:grid; grid-template-columns:max-content 1fr; gap:10px 24px; margin:0 0 18px; max-width:760px;}
+  .recruit-terms dt{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.06em; color:var(--text-faint); padding-top:3px;}
+  .recruit-terms dd{margin:0; font-size:14.5px; line-height:1.7; color:var(--text);}
+  .recruit .recruit-note{font-size:13px; color:var(--text-dim); margin:0 0 20px;}
+  @media (max-width:560px){ .recruit-terms{grid-template-columns:1fr; gap:2px;} .recruit-terms dt{padding-top:10px;} }
 
 
   .contact{border:1px solid var(--panel-line); padding:32px; background:rgba(91,227,240,0.03);}
@@ -236,12 +241,23 @@
     <div class="recruit">
       <span class="chip">RECRUITING</span>
       <h2>一緒に現場を支える仲間を探しています</h2>
-      <p>溶接・雑鍛冶・機械据え付けの経験者はもちろん、未経験からでも現場で技術を身につけたい方を歓迎します。まずは話を聞いてみたいという方もお気軽にどうぞ。</p>
+      <p>溶接・鍛冶・仕上げの経験者はもちろん、未経験からでも現場で技術を身につけたい方を歓迎します。まずは話を聞いてみたいという方もお気軽にどうぞ。</p>
       <div class="recruit-points">
-        <div><strong>未経験</strong>応相談</div>
-        <div><strong>雇用形態</strong>応相談</div>
-        <div><strong>勤務地</strong>現場による</div>
+        <div><strong>経験・学歴・資格</strong>不問</div>
+        <div><strong>雇用形態</strong>正社員(トライアル雇用併用)</div>
+        <div><strong>月給</strong>25万〜40万円</div>
+        <div><strong>残業・転勤</strong>なし</div>
       </div>
+      <dl class="recruit-terms">
+        <dt>募集職種</dt><dd>鍛冶工・溶接工・仕上工</dd>
+        <dt>仕事内容</dt><dd>各種建設現場、プラントでの鍛冶工事、仕上工事の常用施工</dd>
+        <dt>賃金</dt><dd>月額 250,000円〜400,000円(手当等を含む)。通勤手当あり</dd>
+        <dt>就業時間</dt><dd>8:00〜17:00(変形労働時間制)。時間外労働なし</dd>
+        <dt>休日</dt><dd>日曜ほか(週休二日制)。年間休日 108日</dd>
+        <dt>就業場所</dt><dd>東京都世田谷区(転勤なし)</dd>
+        <dt>応募</dt><dd>ハローワークの紹介状が必要です。ハローワーク渋谷の求人番号 13070-62670461。書類選考はありません</dd>
+      </dl>
+      <p class="recruit-note">最新の募集内容は、ハローワークの求人票でご確認ください。応募の前にお話を聞きたい方は、お電話でどうぞ。</p>
       <a class="btn primary" href="#contact">お問い合わせはこちら</a>
     </div>
   </div>
