@@ -53,6 +53,9 @@ export async function readJson(request, maxBytes = 20000) {
 // メールの件名・LINEの1行に入れる文字から、改行と制御文字を外す
 export const oneLine = (v, n = 100) => String(v || "").replace(/[\u0000-\u001f\u007f\u2028\u2029]+/g, " ").trim().slice(0, n);
 
+// 名前の終わりに付いた敬称(様・さん・殿・御中)を外す。返事で1回だけ「様」を付けるため
+export const stripHonorific = (v) => String(v || "").replace(/[\s　]*(様|さま|サマ|さん|殿|御中)+[\s　]*$/u, "").trim();
+
 const json = (obj, status = 200, extra = {}) =>
   new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json; charset=utf-8", ...extra } });
 
@@ -144,9 +147,9 @@ export async function handleChat(request, env, fetchFn = fetch) {
     const tool = (out.content || []).find((b) => b.type === "tool_use" && b.name === "submit_inquiry");
     if (tool) {
       const i = tool.input || {};
-      const rec = await saveInquiry(env, { name: String(i.name || "").slice(0, 100), contact: String(i.contact || "").slice(0, 200), summary: String(i.summary || "").slice(0, 1000), via: "チャット" });
+      const rec = await saveInquiry(env, { name: stripHonorific(oneLine(i.name, 100)), contact: String(i.contact || "").slice(0, 200), summary: String(i.summary || "").slice(0, 1000), via: "チャット" });
       await notify(env, rec, fetchFn);
-      return { status: 200, body: { reply: `${rec.name}様、受け付けました。担当の橋詰から、ご連絡先(${rec.contact})へ連絡します。しばらくお待ちください。`, received: true } };
+      return { status: 200, body: { reply: `${rec.name || "お客"}様、受け付けました。担当の橋詰から、ご連絡先(${rec.contact})へ連絡します。しばらくお待ちください。`, received: true } };
     }
     const reply = (out.content || []).filter((b) => b.type === "text").map((b) => b.text).join("").trim();
     return { status: 200, body: { reply: reply || FALLBACK } };
