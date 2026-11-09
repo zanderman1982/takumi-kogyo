@@ -1,6 +1,7 @@
 // 合同会社匠工業 サイトのチャットと問い合わせの受け口(Cloudflare Workers)
 // 秘密(APIキー等)はコードに書かない。wrangler secret / ダッシュボードの「変数とシークレット」に入れる。
 import { FACTS } from "./facts.js";
+import { getNotes } from "./notes.js";
 
 const MODEL = "claude-sonnet-5-5";
 const MAX_MSG_CHARS = 600;
@@ -201,6 +202,7 @@ export default {
     if (url.pathname === "/chat" && request.method === "POST") r = await handleChat(request, env);
     else if (url.pathname === "/inquiry" && request.method === "POST") r = await handleInquiry(request, env);
     else if (url.pathname === "/admin/inquiries" && ["GET", "POST"].includes(request.method)) r = await handleAdmin(request, env, url);
+    else if (url.pathname === "/notes" && request.method === "GET") r = { status: 200, body: { items: await getNotes(env) } };
     else if (url.pathname === "/health") r = { status: 200, body: { ok: true } };
     else r = { status: 404, body: { error: "not found" } };
     return json(r.body, r.status, cors);
