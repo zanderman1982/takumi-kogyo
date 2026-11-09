@@ -100,6 +100,14 @@
   .note-card .txt{max-width:46ch;}
   .note-card h3{font-family:'Rajdhani',sans-serif; font-size:20px; margin:0 0 8px;}
   .note-card p{font-size:13.5px; color:var(--text-dim); line-height:1.7; margin:0;}
+  .note-feed{margin-top:22px;}
+  .note-feed h3{font-family:'Rajdhani',sans-serif; font-size:17px; margin:0 0 12px; color:var(--text-dim);}
+  .note-feed ul{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; align-items:start;}
+  .note-feed a{display:flex; flex-direction:column; gap:6px; border:1px solid var(--panel-line); text-decoration:none; color:var(--text); background:rgba(91,227,240,0.03); overflow:hidden;}
+  .note-feed a:hover{border-color:var(--cyan-dim);}
+  .note-feed img{width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#08111d;}
+  .note-feed .t{font-size:14px; line-height:1.55; padding:8px 12px 0; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+  .note-feed .d{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-faint); padding:0 12px 12px;}
 
   .recruit{
     border:1px solid var(--panel-line); padding:32px;
@@ -216,6 +224,10 @@
       </div>
       <a class="btn primary" href="https://note.com/open_zander" target="_blank" rel="noopener">note を見る</a>
     </div>
+    <div class="note-feed" id="note-feed" hidden>
+      <h3>最新の記事</h3>
+      <ul id="note-list"></ul>
+    </div>
   </div>
 </section>
 
@@ -285,6 +297,24 @@
 <script>
 // 公開サーバー(Cloudflare Workers)のアドレス。空のあいだは、フォームもチャットも出さない。
 const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
+// note の最新記事。取れなかったときは、欄ごと隠れたまま(上の「note を見る」だけが残る)
+(function () {
+  if (!WORKER_URL) return;
+  fetch(WORKER_URL + "/notes").then(function (r) { return r.json(); }).then(function (j) {
+    const items = (j.items || []).filter(function (n) { return /^https:\/\/note\.com\//.test(n.link); });
+    if (!items.length) return;
+    const ul = document.getElementById("note-list");
+    items.forEach(function (n) {
+      const li = document.createElement("li"), a = document.createElement("a");
+      a.href = n.link; a.target = "_blank"; a.rel = "noopener noreferrer";
+      if (/^https:\/\/assets\.st-note\.com\//.test(n.image || "")) { const im = document.createElement("img"); im.src = n.image; im.alt = ""; im.loading = "lazy"; a.appendChild(im); }
+      const t = document.createElement("span"); t.className = "t"; t.textContent = n.title;
+      const d = document.createElement("span"); d.className = "d"; d.textContent = n.date;
+      a.appendChild(t); a.appendChild(d); li.appendChild(a); ul.appendChild(li);
+    });
+    document.getElementById("note-feed").hidden = false;
+  }).catch(function () {});
+})();
 (function () {
   if (!WORKER_URL) return;
   document.getElementById("inq").classList.add("on");
