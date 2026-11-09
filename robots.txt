@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://takumikougyou1105.co.jp/sitemap.xml
