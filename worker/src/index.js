@@ -33,6 +33,26 @@ const TOOLS = [{
   },
 }];
 
+// 合言葉の比較。早く終わる比べ方だと、1文字ずつ当てられるので、長さが違っても同じだけ比べる
+export function safeEqual(a, b) {
+  const x = String(a), y = String(b);
+  let diff = x.length ^ y.length;
+  for (let i = 0; i < Math.max(x.length, y.length); i++) diff |= (x.charCodeAt(i) || 0) ^ (y.charCodeAt(i) || 0);
+  return diff === 0;
+}
+
+// 本文が大きすぎる送信は読まずに断る(長い入力で時間と費用を使わせない)
+export async function readJson(request, maxBytes = 20000) {
+  const len = Number(request.headers.get("content-length") || 0);
+  if (len > maxBytes) return null;
+  const text = await request.text().catch(() => "");
+  if (text.length > maxBytes) return null;
+  try { return JSON.parse(text); } catch { return null; }
+}
+
+// メールの件名・LINEの1行に入れる文字から、改行と制御文字を外す
+export const oneLine = (v, n = 100) => String(v || "").replace(/[\u0000-\u001f\u007f\u2028\u2029]+/g, " ").trim().slice(0, n);
+
 const json = (obj, status = 200, extra = {}) =>
   new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json; charset=utf-8", ...extra } });
 
@@ -80,13 +100,13 @@ export async function saveInquiry(env, inq, now = Date.now()) {
 
 // 通知。設定されているものだけ送る(Gmailは Resend、LINEは Messaging API)。失敗しても受け付けは止めない
 export async function notify(env, rec, fetchFn = fetch) {
-  const text = `【匠工業HP 問い合わせ】${rec.name}\n連絡先: ${rec.contact}\n用件: ${rec.summary}\n経路: ${rec.via}\n受付: ${rec.at}`;
+  const text = `【匠工業HP 問い合わせ】${oneLine(rec.name)}\n連絡先: ${oneLine(rec.contact, 200)}\n用件: ${String(rec.summary).slice(0, 1000)}\n経路: ${rec.via}\n受付: ${rec.at}`;
   const jobs = [];
   if (env.RESEND_API_KEY && env.NOTIFY_EMAIL_TO) {
     jobs.push(fetchFn("https://api.resend.com/emails", {
       method: "POST",
       headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
-      body: JSON.stringify({ from: env.NOTIFY_EMAIL_FROM || "onboarding@resend.dev", to: [env.NOTIFY_EMAIL_TO], subject: `【匠工業HP】問い合わせ: ${rec.name}`, text }),
+      body: JSON.stringify({ from: env.NOTIFY_EMAIL_FROM || "onboarding@resend.dev", to: [env.NOTIFY_EMAIL_TO], subject: `【匠工業HP】問い合わせ: ${oneLine(rec.name, 60)}`, text }),
     }));
   }
   if (env.LINE_CHANNEL_TOKEN && env.LINE_USER_ID) {
@@ -113,7 +133,7 @@ export async function askClaude(env, messages, fetchFn = fetch) {
 const FALLBACK = "ただいま自動の受付がうまく動いていません。お手数ですが、お電話(03-6805-6474)かメール(takumikougyou.1105@gmail.com)でご連絡ください。";
 
 export async function handleChat(request, env, fetchFn = fetch) {
-  const body = await request.json().catch(() => null);
+  const body = await readJson(request);
   const messages = cleanMessages(body && body.messages);
   if (!messages) return { status: 400, body: { error: "bad request" } };
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
@@ -136,7 +156,7 @@ export async function handleChat(request, env, fetchFn = fetch) {
 }
 
 export async function handleInquiry(request, env, fetchFn = fetch) {
-  const b = await request.json().catch(() => null);
+  const b = await readJson(request);
   if (!b || b.website) return { status: 200, body: { ok: true } }; // 隠し欄に値が入っていたらボット。黙って捨てる
   const name = String(b.name || "").trim().slice(0, 100);
   const contact = String(b.contact || "").trim().slice(0, 200);
@@ -152,14 +172,14 @@ export async function handleInquiry(request, env, fetchFn = fetch) {
 // 新右衛門(PC)が取りに来る。PCへ外から入る口は作らず、こちらから引く
 export async function handleAdmin(request, env, url) {
   const auth = request.headers.get("authorization") || "";
-  if (!env.NOTIFY_TOKEN || auth !== `Bearer ${env.NOTIFY_TOKEN}`) return { status: 401, body: { error: "unauthorized" } };
+  if (!env.NOTIFY_TOKEN || !safeEqual(auth, `Bearer ${env.NOTIFY_TOKEN}`)) return { status: 401, body: { error: "unauthorized" } };
   if (request.method === "GET") {
     const list = await env.KV.list({ prefix: "inq:" });
     const items = (await Promise.all(list.keys.map((k) => env.KV.get(k.name)))).map((s) => JSON.parse(s)).filter((r) => !r.acked);
     items.sort((a, c) => a.at.localeCompare(c.at));
     return { status: 200, body: { items } };
   }
-  const b = await request.json().catch(() => ({}));
+  const b = (await readJson(request)) || {};
   const id = String(b.id || "");
   const raw = await env.KV.get(`inq:${id}`);
   if (!raw) return { status: 404, body: { error: "not found" } };

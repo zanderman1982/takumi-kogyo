@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { allow, cleanMessages, handleChat, handleInquiry, handleAdmin, corsHeaders } from "../src/index.js";
+import { safeEqual, readJson, oneLine, allow, cleanMessages, handleChat, handleInquiry, handleAdmin, corsHeaders } from "../src/index.js";
 
 function kv() {
   const m = new Map();
@@ -98,4 +98,26 @@ test("CORS: 許可したサイトだけ", () => {
   const ng = corsHeaders(new Request("https://x", { headers: { origin: "https://evil.example" } }), env);
   assert.equal(ok["access-control-allow-origin"], "https://takumikougyou1105.co.jp");
   assert.equal(ng["access-control-allow-origin"], undefined);
+});
+
+test("safeEqual: 同じ時だけ真", () => {
+  assert.equal(safeEqual("Bearer a", "Bearer a"), true);
+  assert.equal(safeEqual("Bearer a", "Bearer b"), false);
+  assert.equal(safeEqual("Bearer a", "Bearer ab"), false);
+});
+
+test("readJson: 大きすぎる本文は断り、壊れたJSONはnull", async () => {
+  assert.equal(await readJson(new Request("https://x", { method: "POST", body: "x".repeat(30000) })), null);
+  assert.equal(await readJson(new Request("https://x", { method: "POST", body: "{bad" })), null);
+  assert.deepEqual(await readJson(new Request("https://x", { method: "POST", body: '{"a":1}' })), { a: 1 });
+});
+
+test("oneLine: 改行と制御文字を外す(件名への改行混入を防ぐ)", () => {
+  assert.equal(oneLine("山田\r\nBcc: evil@x.com"), "山田 Bcc: evil@x.com");
+});
+
+test("チャット: 大きすぎる送信は400", async () => {
+  const env = { KV: kv(), ANTHROPIC_API_KEY: "k" };
+  const r = await handleChat(new Request("https://x", { method: "POST", body: "x".repeat(30000) }), env, claudeText("ok"));
+  assert.equal(r.status, 400);
 });
