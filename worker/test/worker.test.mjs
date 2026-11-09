@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { safeEqual, readJson, oneLine, allow, cleanMessages, handleChat, handleInquiry, handleAdmin, corsHeaders } from "../src/index.js";
+import { stripHonorific, safeEqual, readJson, oneLine, allow, cleanMessages, handleChat, handleInquiry, handleAdmin, corsHeaders } from "../src/index.js";
 
 function kv() {
   const m = new Map();
@@ -120,4 +120,21 @@ test("チャット: 大きすぎる送信は400", async () => {
   const env = { KV: kv(), ANTHROPIC_API_KEY: "k" };
   const r = await handleChat(new Request("https://x", { method: "POST", body: "x".repeat(30000) }), env, claudeText("ok"));
   assert.equal(r.status, 400);
+});
+
+test("stripHonorific: 末尾の敬称を外す(様様を防ぐ)", () => {
+  assert.equal(stripHonorific("山田様"), "山田");
+  assert.equal(stripHonorific("山田工務店 山田様"), "山田工務店 山田");
+  assert.equal(stripHonorific("山田さん"), "山田");
+  assert.equal(stripHonorific("山田工務店御中"), "山田工務店");
+  assert.equal(stripHonorific("様山田"), "様山田");
+  assert.equal(stripHonorific("山田"), "山田");
+});
+
+test("chat: 名前に様が付いていても、返事の「様」は1回", async () => {
+  const env = { KV: kv(), ANTHROPIC_API_KEY: "k" };
+  const f = async () => new Response(JSON.stringify({ content: [{ type: "tool_use", name: "submit_inquiry", input: { name: "山田工務店 山田様", contact: "090-0000-0000", summary: "相談" } }] }), { status: 200 });
+  const r = await handleChat(req({ messages: [{ role: "user", content: "山田です" }] }), env, f);
+  assert.match(r.body.reply, /山田様、受け付けました/);
+  assert.doesNotMatch(r.body.reply, /様様/);
 });
