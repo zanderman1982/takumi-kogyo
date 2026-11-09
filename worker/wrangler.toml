@@ -5,7 +5,7 @@ compatibility_date = "2026-11-01"
 # KV の id は、作成したあとに wrangler kv namespace create KV の結果で置き換える
 [[kv_namespaces]]
 binding = "KV"
-id = "REPLACE_WITH_KV_ID"
+id = "83b7727b8ea14d2eb2ee1023c95d624a"
 
 [vars]
 ALLOWED_ORIGINS = "https://takumikougyou1105.co.jp"
