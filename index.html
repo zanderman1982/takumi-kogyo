@@ -280,6 +280,13 @@
   @keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(14deg)}}
   @media (max-width:560px){ html.dusk nav{border-radius:22px; padding:10px 16px;} html.dusk .service{padding-top:78px;} }
   @media (prefers-reduced-motion:reduce){ .pop-deco{animation:none;} html.dusk .btn,html.dusk .service,html.dusk .note-feed a{transition:none;} }
+
+  /* note の記事に表紙画像が無いとき、同じネオンの波のデザインの表紙を自動で作る */
+  .cover{position:relative; aspect-ratio:16/9; overflow:hidden; background:radial-gradient(circle at 78% 28%,rgba(200,60,170,.38),transparent 46%),linear-gradient(160deg,#120a2e,#1d0f4a 60%,#2a1060);}
+  .cover .lab{position:absolute; left:10px; top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.12em; color:#5be3f0;}
+  .cover .ttl{position:absolute; left:12px; right:32%; top:26px; color:#ffd6f4; font-family:'Mochiy Pop One','M PLUS Rounded 1c',sans-serif; font-size:15px; line-height:1.45; text-shadow:0 0 10px #ff4fd8,0 0 2px #fff; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;}
+  .cover svg{position:absolute; inset:0; width:100%; height:100%;}
+  html.dusk .note-feed .cover{border-bottom:3px solid var(--ink);}
 </style>
 </head>
 <body>
@@ -456,6 +463,22 @@
 <script>
 // 公開サーバー(Cloudflare Workers)のアドレス。空のあいだは、フォームもチャットも出さない。
 const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
+
+// 表紙画像が無い記事の、代わりの表紙(ネオンの波)。題名は textContent で入れる(HTMLとして解釈しない)
+function makeCover(title) {
+  const m = String(title || "").match(/^【([^】]{1,12})】\s*(.*)$/);
+  const tag = m ? m[1] : "NOTE", head = (m ? m[2] : String(title || "")).slice(0, 40);
+  const c = document.createElement("div"); c.className = "cover"; c.setAttribute("aria-hidden", "true");
+  c.innerHTML = '<svg viewBox="0 0 320 180" preserveAspectRatio="none"><g fill="none" stroke-linecap="round">' +
+    '<path d="M0 150 Q70 90 150 120 T320 112" stroke="#38e8ff" stroke-width="2.2"/><path d="M0 162 Q80 118 160 138 T320 128" stroke="#6a8cff" stroke-width="1.6" opacity=".8"/>' +
+    '<path d="M0 172 Q90 140 170 154 T320 144" stroke="#ff6fd8" stroke-width="1.4" opacity=".7"/>' +
+    '<circle cx="258" cy="62" r="24" stroke="#ff4fd8" stroke-width="3"/><circle cx="258" cy="62" r="24" stroke="#ff4fd8" stroke-width="7" opacity=".25"/>' +
+    '<path d="M40 126 l9 -14 l6 8 l7 -12 l12 18" stroke="#ff6fd8" stroke-width="1.6"/></g>' +
+    '<text x="258" y="68" font-size="11" font-weight="700" fill="#5be3f0" text-anchor="middle" font-family="sans-serif">新右衛門</text></svg>';
+  const l = document.createElement("span"); l.className = "lab"; l.textContent = "SHINEMON / " + tag;
+  const t = document.createElement("span"); t.className = "ttl"; t.textContent = head;
+  c.appendChild(l); c.appendChild(t); return c;
+}
 // note の最新記事。取れなかったときは、欄ごと隠れたまま(上の「note を見る」だけが残る)
 (function () {
   if (!WORKER_URL) return;
@@ -466,7 +489,7 @@ const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
     items.forEach(function (n) {
       const li = document.createElement("li"), a = document.createElement("a");
       a.href = n.link; a.target = "_blank"; a.rel = "noopener noreferrer";
-      if (/^https:\/\/assets\.st-note\.com\//.test(n.image || "")) { const im = document.createElement("img"); im.src = n.image; im.alt = ""; im.loading = "lazy"; a.appendChild(im); }
+      if (/^https:\/\/assets\.st-note\.com\//.test(n.image || "")) { const im = document.createElement("img"); im.src = n.image; im.alt = ""; im.loading = "lazy"; a.appendChild(im); } else { a.appendChild(makeCover(n.title)); }
       const t = document.createElement("span"); t.className = "t"; t.textContent = n.title;
       const d = document.createElement("span"); d.className = "d"; d.textContent = n.date;
       a.appendChild(t); a.appendChild(d); li.appendChild(a); ul.appendChild(li);
