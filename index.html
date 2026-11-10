@@ -174,9 +174,66 @@
   #chat-form{display:flex; gap:8px; padding:10px; border-top:1px solid var(--panel-line);}
   #chat-form input{flex:1; background:#050b14; color:var(--text); border:1px solid var(--panel-line); padding:9px 10px; font:inherit; font-size:15px; border-radius:2px;}
   #chat-form button{background:var(--cyan); color:#031018; border:0; padding:0 14px; font-weight:700; cursor:pointer; border-radius:2px;}
+
+  /* ===== 改造: 暮れていく一日(スクロールで昼→夕→夜)+ 道具のキャラ ===== */
+  html.dusk, html.dusk body{background:#0b1230;}
+  html.dusk body{background-image:none;}
+  #sky,#stars,#spark{position:fixed; inset:0; width:100%; height:100%; pointer-events:none;}
+  #sky{z-index:0;} #stars{z-index:1;} #spark{z-index:3;}
+  #orb{position:fixed; z-index:1; left:0; top:0; width:78px; height:78px; border-radius:50%; pointer-events:none; will-change:transform;}
+  #land{position:fixed; left:0; bottom:0; width:100%; height:34vh; z-index:2; pointer-events:none;}
+  html.dusk nav,html.dusk header.hero,html.dusk section,html.dusk footer{position:relative; z-index:4;}
+  html.dusk nav{background:rgba(6,12,24,.55); backdrop-filter:blur(6px); padding-left:20px; padding-right:20px; border-bottom:1px solid var(--panel-line);}
+  html.dusk header.hero{border-bottom:none; min-height:calc(100svh - 68px); display:flex; align-items:center; padding:48px 0 150px;}
+  html.dusk header.hero .wrap{width:100%;}
+  html.dusk .eyebrow{color:#fff; text-shadow:0 1px 8px rgba(0,30,70,.55);}
+  html.dusk h1{color:#fff; text-shadow:0 2px 16px rgba(0,30,70,.6);}
+  html.dusk h1 span{color:#ffd36b;}
+  html.dusk .lead{color:#fff; text-shadow:0 1px 10px rgba(0,30,70,.6);}
+  .catch{font-family:'Rajdhani','IBM Plex Sans JP',sans-serif; font-size:clamp(15px,2.4vw,20px); letter-spacing:.16em; color:#fff; margin:0 0 12px; text-shadow:0 1px 8px rgba(0,30,70,.55);}
+  html.dusk .btn.ghost{background:rgba(6,12,24,.45); color:#fff; border-color:rgba(255,255,255,.55);}
+  html.dusk section{border-bottom:none;}
+  html.dusk .section-head{display:inline-flex; background:rgba(6,12,24,.62); padding:8px 16px; border-radius:3px; backdrop-filter:blur(6px);}
+  html.dusk .service,html.dusk .note-card,html.dusk .recruit,html.dusk .contact,html.dusk .note-feed a{background:rgba(6,12,24,.7); backdrop-filter:blur(6px);}
+  html.dusk .note-feed{background:rgba(6,12,24,.0);}
+  html.dusk .note-feed h3{display:inline-block; background:rgba(6,12,24,.62); padding:6px 12px; border-radius:3px; color:#cfe6ef;}
+  html.dusk #about .recruit-terms{background:rgba(6,12,24,.7); backdrop-filter:blur(6px); padding:22px; border:1px solid var(--panel-line);}
+  html.dusk footer{background:rgba(6,12,24,.7);}
+  html.dusk .service{position:relative; padding-right:84px;}
+  .mascot{position:absolute; right:12px; top:12px; width:64px; height:70px; pointer-events:none;}
+  .mascot svg,.cast svg{width:100%; height:100%; display:block; overflow:visible;}
+  .cast{position:absolute; left:0; right:0; bottom:16px; height:80px; overflow:hidden; pointer-events:none; z-index:2;}
+  .cast .track{display:flex; gap:76px; width:max-content; animation:walk 64s linear infinite; padding-left:20px;}
+  .cast .ch{width:60px; height:66px; flex:none; animation:bob 1.4s ease-in-out infinite; filter:saturate(.72) brightness(.92); opacity:.95;}
+  .cast .ch:nth-child(2n){animation-delay:-.4s} .cast .ch:nth-child(3n){animation-delay:-.7s}
+  @keyframes walk{to{transform:translateX(-50%)}}
+  @keyframes bob{50%{transform:translateY(-4px)}}
+  .blink{animation:blink 4.2s infinite; transform-origin:center; transform-box:fill-box;}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+  html.dusk nav .logo{white-space:nowrap;}
+  @media (max-width:560px){ html.dusk nav{flex-wrap:wrap; gap:6px 12px;} html.dusk nav .links{gap:6px 14px; flex-wrap:wrap; font-size:12.5px;} }
+  @media (max-width:560px){ .cast .ch{width:50px; height:55px;} .cast{height:68px;} html.dusk .service{padding-right:22px; padding-top:74px;} .mascot{left:18px; right:auto; top:8px;} }
+
+  .mascot.icon svg{width:100%; height:100%; fill:none; stroke:var(--cyan); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; opacity:.9;}
+  @media (prefers-reduced-motion:reduce){ .cast .track,.cast .ch,.blink{animation:none;} #spark{display:none;} }
+
+  /* note の記事に表紙画像が無いとき、同じネオンの波のデザインの表紙を自動で作る */
+  .cover{position:relative; aspect-ratio:16/9; overflow:hidden; background:radial-gradient(circle at 78% 28%,rgba(200,60,170,.38),transparent 46%),linear-gradient(160deg,#120a2e,#1d0f4a 60%,#2a1060);}
+  .cover .lab{position:absolute; left:10px; top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.12em; color:#5be3f0;}
+  .cover .ttl{position:absolute; left:12px; right:32%; top:26px; color:#ffd6f4; font-family:'IBM Plex Sans JP',sans-serif; font-weight:700; font-size:15px; line-height:1.45; text-shadow:0 0 10px #ff4fd8,0 0 2px #fff; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;}
+  .cover svg{position:absolute; inset:0; width:100%; height:100%;}
 </style>
 </head>
 <body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="orb" aria-hidden="true"></div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<svg id="land" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+  <path d="M0 150 Q200 118 400 150 T800 140 T1000 150 V300H0Z" fill="#2c3550"/>
+  <g fill="#222a40"><rect x="70" y="86" width="190" height="70"/><polygon points="70,86 165,50 260,86"/><rect x="380" y="100" width="150" height="56"/><rect x="690" y="78" width="230" height="80"/></g>
+  <g id="win" fill="#ffd36b" opacity="0"><rect x="720" y="104" width="22" height="30"/><rect x="765" y="104" width="22" height="30"/><rect x="810" y="104" width="22" height="30"/><rect x="870" y="104" width="14" height="30"/><rect x="100" y="112" width="26" height="28"/><rect x="410" y="120" width="30" height="24"/></g>
+</svg>
+<canvas id="spark" aria-hidden="true"></canvas>
 <div class="wrap">
   <nav>
     <div class="logo">匠<span>工業</span></div>
@@ -194,14 +251,16 @@
   <div class="corner tl"></div><div class="corner tr"></div>
   <div class="wrap">
     <div class="eyebrow">GODO KAISHA TAKUMI KOGYO</div>
+    <p class="catch">朝の火花から、夜の灯りまで。</p>
     <h1>溶接・雑鍛冶・機械据え付け。<br>現場を支える<span>匠</span>の手仕事。</h1>
-    <p class="lead">合同会社匠工業は、溶接工事・雑鍛冶・機械据え付けを主軸とする建設業です。経営者自らが現場に立ちながら、日々の判断や記録にAIエージェントを取り入れ、より丁寧な仕事につなげる取り組みを続けています。</p>
+    <p class="lead">合同会社匠工業は、溶接工事・雑鍛冶・機械据え付けを主軸とする建設業です。経営者自らが現場に立ち、一つひとつの仕事を丁寧に進めています。</p>
     <div class="cta-row">
       <a class="btn primary" href="#contact">お問い合わせ</a>
       <a class="btn ghost" href="#recruit">採用情報を見る</a>
       <a class="btn ghost" href="#note">noteでの発信を見る</a>
     </div>
   </div>
+  <div class="cast" id="cast" aria-hidden="true"></div>
 </header>
 
 <section id="services">
@@ -209,16 +268,19 @@
     <div class="section-head"><span class="idx">01</span><h2>事業内容</h2></div>
     <div class="services">
       <div class="service">
+        <span class="mascot" data-m="weld" aria-hidden="true"></span>
         <span class="tag">WELDING</span>
         <h3>溶接工事</h3>
         <p>現場・工場問わず、鉄骨・配管などの溶接工事に対応。仕上がりと安全管理の両立を大切にしています。</p>
       </div>
       <div class="service">
+        <span class="mascot" data-m="hammer" aria-hidden="true"></span>
         <span class="tag">METALWORK</span>
         <h3>雑鍛冶</h3>
         <p>規格品では対応しきれない、現場ごとの要望に合わせた鍛冶加工。細かな寸法調整や一点物の製作も承ります。</p>
       </div>
       <div class="service">
+        <span class="mascot" data-m="wrench" aria-hidden="true"></span>
         <span class="tag">INSTALLATION</span>
         <h3>機械据え付け</h3>
         <p>工場設備・機械の搬入から据え付け・調整まで。精度が求められる据え付け作業を丁寧に進めます。</p>
@@ -232,8 +294,8 @@
     <div class="section-head"><span class="idx">02</span><h2>note で発信中</h2></div>
     <div class="note-card">
       <div class="txt">
-        <h3>建設業経営 × AIエージェント構築のリアル</h3>
-        <p>現場の手戻り、経営判断、AIエージェントを実装していく過程を、数字と実体験ベースで発信しています。同業の方にも、AI活用に興味がある方にも。</p>
+        <h3>建設業経営の、現場からの記録</h3>
+        <p>現場の手戻り、経営判断、日々の工夫を、数字と実体験ベースで発信しています。同業の方にも、これから職人を目指す方にも。</p>
       </div>
       <a class="btn primary" href="https://note.com/open_zander" target="_blank" rel="noopener">note を見る</a>
     </div>
@@ -325,17 +387,33 @@
 </div>
 
 <div id="chat-widget">
-  <button id="chat-open" type="button">AIに質問・相談する</button>
+  <button id="chat-open" type="button">ご相談・お問い合わせ</button>
   <div id="chat-box" role="dialog" aria-label="チャットでのお問い合わせ">
-    <div id="chat-head"><span>匠工業 受付(AI)</span><button id="chat-close" type="button" aria-label="閉じる">×</button></div>
+    <div id="chat-head"><span>匠工業 受付チャット</span><button id="chat-close" type="button" aria-label="閉じる">×</button></div>
     <div id="chat-log"></div>
-    <div id="chat-note">AIが自動で答えます。内容は確定ではありません。急ぎは 03-6805-6474 まで。</div>
+    <div id="chat-note">自動応答(AI)です。内容は確定ではありません。急ぎは 03-6805-6474 まで。</div>
     <form id="chat-form"><input id="chat-input" maxlength="600" placeholder="ご質問をどうぞ" autocomplete="off"><button type="submit">送信</button></form>
   </div>
 </div>
 <script>
 // 公開サーバー(Cloudflare Workers)のアドレス。空のあいだは、フォームもチャットも出さない。
 const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
+
+// 表紙画像が無い記事の、代わりの表紙(ネオンの波)。題名は textContent で入れる(HTMLとして解釈しない)
+function makeCover(title) {
+  const m = String(title || "").match(/^【([^】]{1,12})】\s*(.*)$/);
+  const tag = m ? m[1] : "NOTE", head = (m ? m[2] : String(title || "")).slice(0, 40);
+  const c = document.createElement("div"); c.className = "cover"; c.setAttribute("aria-hidden", "true");
+  c.innerHTML = '<svg viewBox="0 0 320 180" preserveAspectRatio="none"><g fill="none" stroke-linecap="round">' +
+    '<path d="M0 150 Q70 90 150 120 T320 112" stroke="#38e8ff" stroke-width="2.2"/><path d="M0 162 Q80 118 160 138 T320 128" stroke="#6a8cff" stroke-width="1.6" opacity=".8"/>' +
+    '<path d="M0 172 Q90 140 170 154 T320 144" stroke="#ff6fd8" stroke-width="1.4" opacity=".7"/>' +
+    '<circle cx="258" cy="62" r="24" stroke="#ff4fd8" stroke-width="3"/><circle cx="258" cy="62" r="24" stroke="#ff4fd8" stroke-width="7" opacity=".25"/>' +
+    '<path d="M40 126 l9 -14 l6 8 l7 -12 l12 18" stroke="#ff6fd8" stroke-width="1.6"/></g>' +
+    '<text x="258" y="68" font-size="11" font-weight="700" fill="#5be3f0" text-anchor="middle" font-family="sans-serif">新右衛門</text></svg>';
+  const l = document.createElement("span"); l.className = "lab"; l.textContent = "SHINEMON / " + tag;
+  const t = document.createElement("span"); t.className = "ttl"; t.textContent = head;
+  c.appendChild(l); c.appendChild(t); return c;
+}
 // note の最新記事。取れなかったときは、欄ごと隠れたまま(上の「note を見る」だけが残る)
 (function () {
   if (!WORKER_URL) return;
@@ -346,7 +424,7 @@ const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
     items.forEach(function (n) {
       const li = document.createElement("li"), a = document.createElement("a");
       a.href = n.link; a.target = "_blank"; a.rel = "noopener noreferrer";
-      if (/^https:\/\/assets\.st-note\.com\//.test(n.image || "")) { const im = document.createElement("img"); im.src = n.image; im.alt = ""; im.loading = "lazy"; a.appendChild(im); }
+      if (/^https:\/\/assets\.st-note\.com\//.test(n.image || "")) { const im = document.createElement("img"); im.src = n.image; im.alt = ""; im.loading = "lazy"; a.appendChild(im); } else { a.appendChild(makeCover(n.title)); }
       const t = document.createElement("span"); t.className = "t"; t.textContent = n.title;
       const d = document.createElement("span"); d.className = "d"; d.textContent = n.date;
       a.appendChild(t); a.appendChild(d); li.appendChild(a); ul.appendChild(li);
@@ -361,7 +439,7 @@ const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
   const box = document.getElementById("chat-box"), open = document.getElementById("chat-open"), log = document.getElementById("chat-log");
   const history = [];
   function add(role, text) { const d = document.createElement("div"); d.className = "b " + (role === "user" ? "me" : "bot"); d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; }
-  function show() { box.classList.add("open"); open.style.display = "none"; if (!log.children.length) add("assistant", "こんにちは。匠工業の受付AIです。事業内容や採用、お仕事のご相談をどうぞ。"); document.getElementById("chat-input").focus(); }
+  function show() { box.classList.add("open"); open.style.display = "none"; if (!log.children.length) add("assistant", "こんにちは。匠工業の受付です(自動応答)。お仕事のご相談や、採用のご質問をどうぞ。"); document.getElementById("chat-input").focus(); }
   open.onclick = show;
   document.getElementById("chat-close").onclick = function () { box.classList.remove("open"); open.style.display = ""; };
   document.getElementById("chat-form").onsubmit = async function (e) {
@@ -385,6 +463,128 @@ const WORKER_URL = "https://takumi-kogyo-chat.takumi-kogyo-chat.workers.dev";
       if (r.ok) { m.textContent = j.message || "受け付けました。"; f.reset(); } else { m.className = "msg err"; m.textContent = j.error || "送れませんでした。お電話かメールでご連絡ください。"; }
     } catch (err) { m.className = "msg err"; m.textContent = "つながりませんでした。お電話かメールでご連絡ください。"; }
   };
+})();
+</script>
+<script>
+// 改造: 暮れていく一日。スクロールの位置で、空が昼→夕→夜に変わる。飾りなので、JavaScript が動かなくても内容は読める。
+(function () {
+  var root = document.documentElement;
+  if (!document.getElementById('sky')) return;
+  root.classList.add('dusk');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sky = document.getElementById('sky'), g = sky.getContext('2d');
+  var st = document.getElementById('stars'), sg = st.getContext('2d');
+  var sp = document.getElementById('spark'), pg = sp.getContext('2d');
+  var orb = document.getElementById('orb'), win = document.getElementById('win');
+  var W = 0, H = 0, P = 0, stars = [], parts = [];
+
+  function size() {
+    W = innerWidth; H = innerHeight;
+    [sky, st, sp].forEach(function (c) { c.width = W; c.height = H; });
+    stars = [];
+    for (var i = 0; i < 90; i++) stars.push({ x: Math.random() * W, y: Math.random() * H * 0.6, r: Math.random() * 1.4 + 0.4, t: Math.random() * 6 });
+  }
+  addEventListener('resize', size); size();
+
+  // 空の色: 昼(濃いめの青)→夕(橙)→夕暮れ(赤)→夜(紺)。文字が読めるよう、昼もあまり明るくしない
+  var K = [[[79, 159, 224], [168, 212, 242]], [[150, 200, 240], [255, 226, 184]], [[238, 170, 110], [226, 126, 78]], [[190, 78, 60], [104, 38, 48]], [[14, 18, 54], [34, 40, 92]]];
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function mix(a, b, t) { return a.map(function (v, i) { return Math.round(lerp(v, b[i], t)); }); }
+  function pal(p) { var n = K.length - 1, s = p * n, i = Math.min(n - 1, Math.floor(s)), t = s - i; return [mix(K[i][0], K[i + 1][0], t), mix(K[i][1], K[i + 1][1], t)]; }
+  function rgb(a) { return 'rgb(' + a.join(',') + ')'; }
+
+  function paint(now) {
+    var c = pal(P), gr = g.createLinearGradient(0, 0, 0, H);
+    gr.addColorStop(0, rgb(c[0])); gr.addColorStop(1, rgb(c[1])); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    // 太陽 → 月
+    var night = P > 0.62, x, y;
+    if (!night) { var u = P / 0.62; x = W * (0.82 - 0.4 * u); y = H * (0.2 + 0.52 * u * u); } // 昼は右上、夕方に向かって左へ沈む
+    else { var m = (P - 0.62) / 0.38; x = W * (0.2 + 0.58 * m); y = H * (0.74 - 0.56 * m); } // 夜は月が昇る
+    var col = night ? '#f6f3da' : (P > 0.3 ? '#ffd9a0' : '#fff6c8');
+    orb.style.background = col; orb.style.boxShadow = '0 0 ' + (night ? 30 : 70) + 'px ' + col;
+    orb.style.transform = 'translate(' + (x - 39) + 'px,' + (y - 39) + 'px)';
+    // 星
+    sg.clearRect(0, 0, W, H);
+    var sa = Math.max(0, (P - 0.6) / 0.3);
+    if (sa > 0) for (var i = 0; i < stars.length; i++) { var s = stars[i]; sg.globalAlpha = sa * (0.5 + 0.5 * Math.sin(now / 600 + s.t)); sg.fillStyle = '#fff'; sg.beginPath(); sg.arc(s.x, s.y, s.r, 0, 7); sg.fill(); }
+    // 窓の灯り
+    if (win) win.setAttribute('opacity', Math.max(0, Math.min(1, (P - 0.62) / 0.2)));
+  }
+
+  function sparks() {
+    pg.clearRect(0, 0, W, H);
+    var ox = W * 0.16, oy = H * 0.86;
+    if (Math.random() < 0.35) for (var i = 0; i < 2; i++) parts.push({ x: ox, y: oy, vx: (Math.random() - 0.4) * 4.5, vy: -Math.random() * 4.5 - 1, l: 1 });
+    for (var j = 0; j < parts.length; j++) { var q = parts[j]; q.x += q.vx; q.y += q.vy; q.vy += 0.17; q.l -= 0.022; pg.globalAlpha = Math.max(0, q.l); pg.fillStyle = '#ffd36b'; pg.fillRect(q.x, q.y, 2.3, 2.3); }
+    while (parts.length && parts[0].l <= 0) parts.shift();
+  }
+
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - innerHeight;
+    P = max > 0 ? Math.max(0, Math.min(1, scrollY / max)) : 0;
+    if (reduce) paint(0);
+  }
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  var last = 0;
+  function loop(now) {
+    requestAnimationFrame(loop);
+    if (document.hidden || now - last < 33) return; // 30コマ/秒
+    last = now; paint(now); sparks();
+  }
+  if (reduce) paint(0); else requestAnimationFrame(loop);
+
+  // ===== 道具のキャラ =====
+  var COL = { weld: '#3aa0ff', hammer: '#ff6a1a', wrench: '#35c48a', anvil: '#ffcf3a', bolt: '#ff5b8d', spark: '#8a63ff' };
+  function mascot(kind) {
+    var c = COL[kind], acc = '';
+    if (kind === 'weld') acc = '<path d="M30 30 Q60 -6 90 30 L84 44 Q60 30 36 44Z" fill="#1a3a6e"/><rect x="40" y="26" width="40" height="9" rx="3" fill="#7fd0ff" opacity=".85"/>';
+    if (kind === 'hammer') acc = '<g transform="rotate(25 100 60)"><rect x="96" y="40" width="7" height="50" rx="3" fill="#8a5a2b"/><rect x="82" y="32" width="36" height="16" rx="3" fill="#555"/></g>';
+    if (kind === 'wrench') acc = '<g transform="rotate(-25 20 60)"><rect x="16" y="40" width="7" height="50" rx="3" fill="#cfd6dd"/><circle cx="19" cy="36" r="12" fill="#cfd6dd"/><rect x="14" y="22" width="10" height="14" fill="' + c + '"/></g>';
+    if (kind === 'anvil') acc = '<path d="M30 112 L90 112 L82 126 L38 126Z" fill="#444"/><rect x="38" y="104" width="44" height="10" fill="#555"/>';
+    if (kind === 'bolt') acc = '<polygon points="46,22 74,22 88,34 74,46 46,46 32,34" fill="#d8dde3" stroke="#9aa3ad" stroke-width="2"/><circle cx="60" cy="34" r="7" fill="' + c + '"/>';
+    if (kind === 'spark') acc = '<g stroke="#ffe14d" stroke-width="5" stroke-linecap="round"><line x1="60" y1="2" x2="60" y2="22"/><line x1="40" y1="8" x2="46" y2="24"/><line x1="80" y1="8" x2="74" y2="24"/></g>';
+    return '<svg viewBox="0 0 120 130" aria-hidden="true" focusable="false">' +
+      (kind === 'anvil' ? acc : '') +
+      '<ellipse cx="60" cy="68" rx="46" ry="42" fill="' + c + '"/>' +
+      (kind !== 'anvil' ? acc : '') +
+      '<g class="blink"><circle cx="42" cy="62" r="10" fill="#fff"/><circle cx="78" cy="62" r="10" fill="#fff"/></g>' +
+      '<circle class="pu" data-x="42" data-y="62" cx="42" cy="62" r="5" fill="#111"/><circle class="pu" data-x="78" data-y="62" cx="78" cy="62" r="5" fill="#111"/>' +
+      '<path d="M46 86 Q60 98 74 86" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<ellipse cx="42" cy="118" rx="12" ry="6" fill="rgba(0,0,0,.35)"/><ellipse cx="78" cy="118" rx="12" ry="6" fill="rgba(0,0,0,.35)"/></svg>';
+  }
+
+  // 事業内容のカードには、線で描いた道具のアイコンを置く(落ち着いた印象にするため)
+  function icon(kind) {
+    var d = {
+      weld: '<path d="M14 36 Q14 10 40 10 Q66 10 66 36 V52 H14Z"/><path d="M24 30 H56 V40 H24Z"/>',
+      hammer: '<rect x="14" y="12" width="46" height="18" rx="3"/><path d="M37 30 V68"/>',
+      wrench: '<rect x="16" y="18" width="48" height="32" rx="3"/><circle cx="40" cy="34" r="8"/><path d="M10 58 H70 M24 50 V58 M56 50 V58"/>'
+    };
+    return '<svg viewBox="0 0 80 80" aria-hidden="true" focusable="false">' + (d[kind] || '') + '</svg>';
+  }
+  var order = ['hammer', 'weld', 'wrench', 'anvil', 'bolt', 'spark'];
+  var cast = document.getElementById('cast');
+  if (cast) {
+    var h = '';
+    for (var k = 0; k < 2; k++) order.forEach(function (n) { h += '<div class="ch">' + mascot(n) + '</div>'; });
+    cast.innerHTML = '<div class="track">' + h + '</div>';
+  }
+  document.querySelectorAll('.mascot[data-m]').forEach(function (el) { el.classList.add('icon'); el.innerHTML = icon(el.getAttribute('data-m')); });
+
+  // 目がマウス(指)の方を見る
+  if (!reduce) {
+    var mx = -1, my = -1, raf = 0;
+    function look() {
+      raf = 0;
+      document.querySelectorAll('.pu').forEach(function (p) {
+        var r = p.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        var dx = mx - cx, dy = my - cy, d = Math.sqrt(dx * dx + dy * dy) || 1, m = Math.min(3.5, d / 40);
+        p.style.transform = 'translate(' + (dx / d * m) + 'px,' + (dy / d * m) + 'px)';
+      });
+    }
+    addEventListener('pointermove', function (e) { mx = e.clientX; my = e.clientY; if (!raf) raf = requestAnimationFrame(look); }, { passive: true });
+  }
 })();
 </script>
 </body>
