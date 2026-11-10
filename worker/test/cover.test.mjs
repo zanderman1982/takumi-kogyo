@@ -14,6 +14,7 @@ test("代わりの表紙の題名は textContent で入れる(HTMLとして解�
   assert.match(fn, /t\.textContent = head/);
   assert.match(fn, /l\.textContent = "SHINEMON \/ " \+ tag/);
   // innerHTML に入れているのは、固定のSVGだけ(題名や記事の文字を連結していない)
-  const inner = fn.match(/c\.innerHTML = ([\s\S]*?);\n/)[1];
+  // 改行コードは、環境によって LF か CRLF になるので、どちらでも通す
+  const inner = fn.match(/c\.innerHTML = ([\s\S]*?);\r?\n/)[1];
   assert.ok(!/\b(title|head|tag)\b/.test(inner), "innerHTML に記事の文字が入っている");
 });
