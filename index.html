@@ -24,7 +24,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #050b14;
@@ -216,77 +215,11 @@
   @media (max-width:560px){ .cast .ch{width:68px; height:76px;} .cast{height:88px;} html.dusk .service{padding-right:22px; padding-top:74px;} .mascot{left:18px; right:auto; top:8px;} }
   @media (prefers-reduced-motion:reduce){ .cast .track,.cast .ch,.blink{animation:none;} #spark{display:none;} }
 
-  /* ===== POP仕上げ: 太い縁取り、ベタ影、丸ゴシック、ステッカー風の見出し ===== */
-  :root{ --ink:#0b1230; --cream:#fff9ec; --pop-coral:#ff5b6e; --pop-yellow:#ffd23f; --pop-mint:#3ddc97; --pop-sky:#38b6ff; --pop-violet:#8a63ff; }
-  html.dusk body{font-family:'M PLUS Rounded 1c','IBM Plex Sans JP',sans-serif;}
-  html.dusk,html.dusk body{overflow-x:hidden; overflow-x:clip; max-width:100%;}
-  html.dusk h1,html.dusk h2,html.dusk h3,html.dusk .catch,html.dusk .btn,html.dusk .logo{font-family:'Mochiy Pop One','M PLUS Rounded 1c',sans-serif; font-weight:400; letter-spacing:.03em;}
-
-  /* ヒーロー */
-  html.dusk h1{font-size:clamp(30px,6vw,60px); line-height:1.25; color:#fff;
-    text-shadow:3px 3px 0 var(--ink),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),0 6px 0 var(--ink);}
-  html.dusk h1 span{color:var(--pop-yellow);}
-  html.dusk .catch{display:inline-block; background:var(--pop-coral); color:#fff; border:3px solid var(--ink); border-radius:999px; padding:6px 18px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-2deg); text-shadow:none; font-size:clamp(14px,2.4vw,19px);}
-  html.dusk .eyebrow{color:var(--ink); background:var(--pop-yellow); display:inline-block; padding:3px 10px; border:2px solid var(--ink); border-radius:6px; text-shadow:none; transform:rotate(1.5deg);}
-  html.dusk .lead{color:#fff; font-weight:700; text-shadow:2px 2px 0 var(--ink),-1px -1px 0 var(--ink),1px -1px 0 var(--ink),-1px 1px 0 var(--ink);}
-
-  /* ボタン: 丸いステッカー。押すとへこむ */
-  html.dusk .btn{border:3px solid var(--ink); border-radius:999px; padding:12px 26px; box-shadow:4px 4px 0 var(--ink); transition:transform .12s, box-shadow .12s; font-size:15px;}
-  html.dusk .btn.primary{background:var(--pop-yellow); color:var(--ink);}
-  html.dusk .btn.ghost{background:#fff; color:var(--ink); border:3px solid var(--ink);}
-  html.dusk .btn:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink);}
-  html.dusk .btn:active{transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ink);}
-
-  /* ナビ: クリーム色の丸いバー */
-  html.dusk nav{background:var(--cream); border:3px solid var(--ink); border-radius:999px; box-shadow:4px 4px 0 var(--ink); margin-top:14px; padding:10px 26px; backdrop-filter:none;}
-  html.dusk nav .logo{color:var(--ink);} html.dusk nav .logo span{color:var(--pop-coral);}
-  html.dusk nav .links a{color:var(--ink); font-weight:700;} html.dusk nav .links a:hover{color:var(--pop-coral);}
-
-  /* 見出し: 色ちがいの斜めステッカー */
-  html.dusk .section-head{background:var(--pop-yellow); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-1.5deg); backdrop-filter:none;}
-  html.dusk .section-head .idx,html.dusk .section-head h2{color:var(--ink);}
-  html.dusk #note .section-head{background:var(--pop-sky); transform:rotate(1deg);}
-  html.dusk #about .section-head{background:var(--pop-mint); transform:rotate(-1deg);}
-  html.dusk #contact .section-head{background:var(--pop-coral); transform:rotate(1.2deg);} html.dusk #contact .section-head h2,html.dusk #contact .section-head .idx{color:#fff;}
-
-  /* カード: クリーム色 + 太い縁 + ベタ影(中の文字は濃い色に切り替える) */
-  html.dusk .service,html.dusk .note-card,html.dusk .recruit,html.dusk .contact,html.dusk #about .recruit-terms,html.dusk .note-feed a{
-    --text:#1b1f3b; --text-dim:#4a5170; --text-faint:#6b7190; --panel-line:rgba(27,31,59,.25); --cyan-dim:#ff5b6e;
-    background:var(--cream); color:#1b1f3b; border:3px solid var(--ink); border-radius:16px; box-shadow:6px 6px 0 var(--ink); backdrop-filter:none;}
-  html.dusk .service .tag,html.dusk .recruit .chip{color:var(--ink); background:var(--pop-mint); border:2px solid var(--ink); border-radius:999px; padding:2px 10px; display:inline-block;}
-  html.dusk .recruit .chip{background:var(--pop-coral); color:#fff;}
-  html.dusk .service h3,html.dusk .note-card h3,html.dusk .recruit h2{color:var(--ink);}
-  html.dusk .recruit-points strong{font-family:'Mochiy Pop One',sans-serif; font-weight:400; color:var(--pop-coral);}
-  html.dusk .contact dd a{border-bottom:2px solid var(--pop-coral);}
-  html.dusk .service{transition:transform .2s;}
-  html.dusk .service:nth-child(1){transform:rotate(-1.2deg);} html.dusk .service:nth-child(2){transform:rotate(1deg);} html.dusk .service:nth-child(3){transform:rotate(-.8deg);}
-  html.dusk .service:hover{transform:rotate(0) translateY(-8px);}
-  html.dusk .note-feed a{transition:transform .2s;} html.dusk .note-feed li:nth-child(odd) a{transform:rotate(-.8deg);} html.dusk .note-feed li:nth-child(even) a{transform:rotate(.8deg);} html.dusk .note-feed a:hover{transform:rotate(0) translateY(-6px);}
-  html.dusk .note-feed .t{color:var(--ink);}
-  html.dusk .note-feed h3{background:var(--pop-sky); color:var(--ink); border:3px solid var(--ink); border-radius:10px; box-shadow:3px 3px 0 var(--ink);}
-  /* フォーム: 白い入力欄 */
-  html.dusk .inq input,html.dusk .inq textarea{background:#fff; color:#1b1f3b; border:2px solid var(--ink); border-radius:10px;}
-  html.dusk .inq label{color:#4a5170;} html.dusk .inq h3{color:var(--ink);}
-  html.dusk .inq .msg{color:#0a7a4a;} html.dusk .inq .msg.err{color:#c2410c;}
-  html.dusk .inq button{box-shadow:4px 4px 0 var(--ink);}
-  html.dusk .inq .hp{border:0;}
-  /* チャット窓のボタンも丸いステッカー */
-  html.dusk #chat-open{background:var(--pop-yellow); color:var(--ink); border:3px solid var(--ink); box-shadow:4px 4px 0 var(--ink); font-family:'Mochiy Pop One',sans-serif; font-weight:400;}
-  html.dusk #chat-box{border:3px solid var(--ink); border-radius:16px; box-shadow:6px 6px 0 var(--ink);}
-  html.dusk footer{background:var(--cream); color:var(--ink); border:3px solid var(--ink); border-radius:16px 16px 0 0; margin-top:24px;}
-  html.dusk footer div{color:var(--ink);}
-  /* ヒーローを飾る、ふわふわ浮く星・まる */
-  .pop-deco{position:absolute; z-index:1; pointer-events:none; animation:floaty 6s ease-in-out infinite;}
-  @keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(14deg)}}
-  @media (max-width:560px){ html.dusk nav{border-radius:22px; padding:10px 16px;} html.dusk .service{padding-top:78px;} }
-  @media (prefers-reduced-motion:reduce){ .pop-deco{animation:none;} html.dusk .btn,html.dusk .service,html.dusk .note-feed a{transition:none;} }
-
   /* note の記事に表紙画像が無いとき、同じネオンの波のデザインの表紙を自動で作る */
   .cover{position:relative; aspect-ratio:16/9; overflow:hidden; background:radial-gradient(circle at 78% 28%,rgba(200,60,170,.38),transparent 46%),linear-gradient(160deg,#120a2e,#1d0f4a 60%,#2a1060);}
   .cover .lab{position:absolute; left:10px; top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.12em; color:#5be3f0;}
-  .cover .ttl{position:absolute; left:12px; right:32%; top:26px; color:#ffd6f4; font-family:'Mochiy Pop One','M PLUS Rounded 1c',sans-serif; font-size:15px; line-height:1.45; text-shadow:0 0 10px #ff4fd8,0 0 2px #fff; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;}
+  .cover .ttl{position:absolute; left:12px; right:32%; top:26px; color:#ffd6f4; font-family:'IBM Plex Sans JP',sans-serif; font-weight:700; font-size:15px; line-height:1.45; text-shadow:0 0 10px #ff4fd8,0 0 2px #fff; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;}
   .cover svg{position:absolute; inset:0; width:100%; height:100%;}
-  html.dusk .note-feed .cover{border-bottom:3px solid var(--ink);}
 </style>
 </head>
 <body>
@@ -318,7 +251,7 @@
     <div class="eyebrow">GODO KAISHA TAKUMI KOGYO</div>
     <p class="catch">朝の火花から、夜の灯りまで。</p>
     <h1>溶接・雑鍛冶・機械据え付け。<br>現場を支える<span>匠</span>の手仕事。</h1>
-    <p class="lead">合同会社匠工業は、溶接工事・雑鍛冶・機械据え付けを主軸とする建設業です。経営者自らが現場に立ちながら、日々の判断や記録にAIエージェントを取り入れ、より丁寧な仕事につなげる取り組みを続けています。</p>
+    <p class="lead">合同会社匠工業は、溶接工事・雑鍛冶・機械据え付けを主軸とする建設業です。経営者自らが現場に立ち、一つひとつの仕事を丁寧に進めています。</p>
     <div class="cta-row">
       <a class="btn primary" href="#contact">お問い合わせ</a>
       <a class="btn ghost" href="#recruit">採用情報を見る</a>
@@ -359,8 +292,8 @@
     <div class="section-head"><span class="idx">02</span><h2>note で発信中</h2></div>
     <div class="note-card">
       <div class="txt">
-        <h3>建設業経営 × AIエージェント構築のリアル</h3>
-        <p>現場の手戻り、経営判断、AIエージェントを実装していく過程を、数字と実体験ベースで発信しています。同業の方にも、AI活用に興味がある方にも。</p>
+        <h3>建設業経営の、現場からの記録</h3>
+        <p>現場の手戻り、経営判断、日々の工夫を、数字と実体験ベースで発信しています。同業の方にも、これから職人を目指す方にも。</p>
       </div>
       <a class="btn primary" href="https://note.com/open_zander" target="_blank" rel="noopener">note を見る</a>
     </div>
@@ -452,11 +385,11 @@
 </div>
 
 <div id="chat-widget">
-  <button id="chat-open" type="button">AIに質問・相談する</button>
+  <button id="chat-open" type="button">ご相談・お問い合わせ</button>
   <div id="chat-box" role="dialog" aria-label="チャットでのお問い合わせ">
-    <div id="chat-head"><span>匠工業 受付(AI)</span><button id="chat-close" type="button" aria-label="閉じる">×</button></div>
+    <div id="chat-head"><span>匠工業 受付チャット</span><button id="chat-close" type="button" aria-label="閉じる">×</button></div>
     <div id="chat-log"></div>
-    <div id="chat-note">AIが自動で答えます。内容は確定ではありません。急ぎは 03-6805-6474 まで。</div>
+    <div id="chat-note">自動応答(AI)です。内容は確定ではありません。急ぎは 03-6805-6474 まで。</div>
     <form id="chat-form"><input id="chat-input" maxlength="600" placeholder="ご質問をどうぞ" autocomplete="off"><button type="submit">送信</button></form>
   </div>
 </div>
@@ -504,7 +437,7 @@ function makeCover(title) {
   const box = document.getElementById("chat-box"), open = document.getElementById("chat-open"), log = document.getElementById("chat-log");
   const history = [];
   function add(role, text) { const d = document.createElement("div"); d.className = "b " + (role === "user" ? "me" : "bot"); d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; }
-  function show() { box.classList.add("open"); open.style.display = "none"; if (!log.children.length) add("assistant", "こんにちは。匠工業の受付AIです。事業内容や採用、お仕事のご相談をどうぞ。"); document.getElementById("chat-input").focus(); }
+  function show() { box.classList.add("open"); open.style.display = "none"; if (!log.children.length) add("assistant", "こんにちは。匠工業の受付です(自動応答)。お仕事のご相談や、採用のご質問をどうぞ。"); document.getElementById("chat-input").focus(); }
   open.onclick = show;
   document.getElementById("chat-close").onclick = function () { box.classList.remove("open"); open.style.display = ""; };
   document.getElementById("chat-form").onsubmit = async function (e) {
@@ -611,9 +544,9 @@ function makeCover(title) {
     if (kind === 'spark') acc = '<g stroke="#ffe14d" stroke-width="5" stroke-linecap="round"><line x1="60" y1="2" x2="60" y2="22"/><line x1="40" y1="8" x2="46" y2="24"/><line x1="80" y1="8" x2="74" y2="24"/></g>';
     return '<svg viewBox="0 0 120 130" aria-hidden="true" focusable="false">' +
       (kind === 'anvil' ? acc : '') +
-      '<ellipse cx="60" cy="68" rx="46" ry="42" fill="' + c + '" stroke="#0b1230" stroke-width="4"/>' +
+      '<ellipse cx="60" cy="68" rx="46" ry="42" fill="' + c + '"/>' +
       (kind !== 'anvil' ? acc : '') +
-      '<g class="blink"><circle cx="42" cy="62" r="10" fill="#fff" stroke="#0b1230" stroke-width="2.5"/><circle cx="78" cy="62" r="10" fill="#fff" stroke="#0b1230" stroke-width="2.5"/></g>' +
+      '<g class="blink"><circle cx="42" cy="62" r="10" fill="#fff"/><circle cx="78" cy="62" r="10" fill="#fff"/></g>' +
       '<circle class="pu" data-x="42" data-y="62" cx="42" cy="62" r="5" fill="#111"/><circle class="pu" data-x="78" data-y="62" cx="78" cy="62" r="5" fill="#111"/>' +
       '<path d="M46 86 Q60 98 74 86" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round"/>' +
       '<ellipse cx="42" cy="118" rx="12" ry="6" fill="rgba(0,0,0,.35)"/><ellipse cx="78" cy="118" rx="12" ry="6" fill="rgba(0,0,0,.35)"/></svg>';
@@ -626,20 +559,6 @@ function makeCover(title) {
     cast.innerHTML = '<div class="track">' + h + '</div>';
   }
   document.querySelectorAll('.mascot[data-m]').forEach(function (el) { el.innerHTML = mascot(el.getAttribute('data-m')); });
-
-
-  // ヒーローの飾り: ふわふわ浮く星とまる(飾りなので、読み上げからは外す)
-  var hero = document.querySelector('header.hero');
-  if (hero && !reduce) {
-    var shapes = [
-      ['<svg width="46" height="46" viewBox="0 0 24 24"><polygon points="12,1 15,9 23,9 17,14 19,22 12,17 5,22 7,14 1,9 9,9" fill="#ffd23f" stroke="#0b1230" stroke-width="1.8" stroke-linejoin="round"/></svg>', '6%', '20%', '0s'],
-      ['<svg width="34" height="34" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ff5b6e" stroke="#0b1230" stroke-width="2"/></svg>', '88%', '16%', '1.2s'],
-      ['<svg width="40" height="40" viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="#3ddc97" stroke="#0b1230" stroke-width="2" stroke-linejoin="round"/></svg>', '78%', '58%', '2.1s'],
-      ['<svg width="30" height="30" viewBox="0 0 24 24"><polygon points="12,1 15,9 23,9 17,14 19,22 12,17 5,22 7,14 1,9 9,9" fill="#fff" stroke="#0b1230" stroke-width="2" stroke-linejoin="round"/></svg>', '48%', '10%', '3s'],
-      ['<svg width="28" height="28" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="#8a63ff" stroke="#0b1230" stroke-width="2"/></svg>', '92%', '44%', '0.7s']
-    ];
-    shapes.forEach(function (d) { var e = document.createElement('span'); e.className = 'pop-deco'; e.setAttribute('aria-hidden', 'true'); e.style.left = d[1]; e.style.top = d[2]; e.style.animationDelay = d[3]; e.innerHTML = d[0]; hero.appendChild(e); });
-  }
 
   // 目がマウス(指)の方を見る
   if (!reduce) {
